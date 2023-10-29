@@ -8,7 +8,9 @@ COPY package*.json ./
 RUN npm i -f
 # Bundle app source
 COPY . .
+
 ENV NODE_OPTIONS=--openssl-legalcy-provider
+
 RUN ionic build
 ## Run 
 FROM nginx:alpine
