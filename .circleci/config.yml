@@ -1,26 +1,74 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/configuration-reference/#executor-job
-    docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/configuration-reference/#steps
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
 
-# Orchestrate jobs using workflows
-# See: https://circleci.com/docs/configuration-reference/#workflows
+  deploy-dockerhub:
+
+      machine:
+
+        image: ubuntu-2204:2022.04.2
+
+      steps:
+
+        - checkout
+
+        - run:
+
+            name: Login to dockerhub
+
+            command: |
+
+              echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+
+        - run:
+
+            name: Push udagram-api-feed to Dockerhub
+
+            command: |
+
+              docker build -t udagram-api-feed ./udagram-api-feed
+              docker tag udagram-api-feed dtdung/udagram-api-feed:v1
+
+              docker push dtdung/udagram-api-feed:v1
+
+        - run:
+
+            name: Deploy udagram-api-user to Dockerhub
+
+            command: |
+
+              docker build -t udagram-api-user ./udagram-api-user
+              docker tag udagram-api-user dtdung/udagram-api-user:v1.0.0
+
+              docker push dtdung/udagram-api-user:v1.0.0
+
+        - run:
+
+            name: Deploy udagram-frontend to Dockerhub
+
+            command: |
+
+              docker build -t udagram-frontend ./udagram-frontend
+              docker tag udagram-frontend dtdung/udagram-frontend:v1.0.0
+
+              docker push dtdung/udagram-frontend:v1.0.0
+
+        - run:
+
+            name: Deploy udagram-reverseproxy to Dockerhub
+
+            command: |
+
+              docker build -t udagram-reverseproxy ./udagram-reverseproxy
+
+              docker tag udagram-reverseproxy dtdung/udagram-reverseproxy:v1.0.0
+
+              docker push dtdung/udagram-reverseproxy:v1.0.0
+
 workflows:
-  say-hello-workflow:
+
+  default:
+
     jobs:
-      - say-hello
+
+      - deploy-dockerhub
