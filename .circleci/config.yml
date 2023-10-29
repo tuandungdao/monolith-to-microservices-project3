@@ -38,9 +38,9 @@ jobs:
             command: |
 
               docker build -t udagram-api-user ./udagram-api-user
-              docker tag udagram-api-user dtdung/udagram-api-user:v1.0.0
+              docker tag udagram-api-user dtdung/udagram-api-user:v1
 
-              docker push dtdung/udagram-api-user:v1.0.0
+              docker push dtdung/udagram-api-user:v1
 
         - run:
 
@@ -49,9 +49,9 @@ jobs:
             command: |
 
               docker build -t udagram-frontend ./udagram-frontend
-              docker tag udagram-frontend dtdung/udagram-frontend:v1.0.0
+              docker tag udagram-frontend dtdung/udagram-frontend:v1
 
-              docker push dtdung/udagram-frontend:v1.0.0
+              docker push dtdung/udagram-frontend:v1
 
         - run:
 
@@ -61,9 +61,9 @@ jobs:
 
               docker build -t udagram-reverseproxy ./udagram-reverseproxy
 
-              docker tag udagram-reverseproxy dtdung/udagram-reverseproxy:v1.0.0
+              docker tag udagram-reverseproxy dtdung/udagram-reverseproxy:v1
 
-              docker push dtdung/udagram-reverseproxy:v1.0.0
+              docker push dtdung/udagram-reverseproxy:v1
 
 workflows:
 
